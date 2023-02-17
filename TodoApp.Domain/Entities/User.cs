@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace TodoApp.Domain.Entities
 {
-    public class Todo
+    public class User
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Title { get; set; }
+        public string Name { get; set; }
 
-        public string? Description { get; set; }
-
-        public DateTime DueDate { get; set; }
-
-        public bool Completed { get; set; }
+        public List<TodoList>? TodoLists { get; set; }
     }
 }

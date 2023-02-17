@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TodoApp.Backend.Migrations
+namespace TodoApp.Domain.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -33,9 +33,9 @@ namespace TodoApp.Backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TodoListId = table.Column<int>(type: "int", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Completed = table.Column<bool>(type: "bit", nullable: false)
+                    Completed = table.Column<bool>(type: "bit", nullable: false),
+                    TodoListId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,8 +44,7 @@ namespace TodoApp.Backend.Migrations
                         name: "FK_Todos_TodoLists_TodoListId",
                         column: x => x.TodoListId,
                         principalTable: "TodoLists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

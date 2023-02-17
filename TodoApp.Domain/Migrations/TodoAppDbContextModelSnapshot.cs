@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TodoApp.Backend;
+using TodoApp.Domain;
 
 #nullable disable
 
-namespace TodoApp.Backend.Migrations
+namespace TodoApp.Domain.Migrations
 {
     [DbContext(typeof(TodoAppDbContext))]
     partial class TodoAppDbContextModelSnapshot : ModelSnapshot
@@ -43,7 +43,7 @@ namespace TodoApp.Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TodoListId")
+                    b.Property<int?>("TodoListId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -75,13 +75,9 @@ namespace TodoApp.Backend.Migrations
 
             modelBuilder.Entity("TodoApp.Domain.Entities.Todo", b =>
                 {
-                    b.HasOne("TodoApp.Domain.Entities.TodoList", "TodoList")
+                    b.HasOne("TodoApp.Domain.Entities.TodoList", null)
                         .WithMany("Todos")
-                        .HasForeignKey("TodoListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TodoList");
+                        .HasForeignKey("TodoListId");
                 });
 
             modelBuilder.Entity("TodoApp.Domain.Entities.TodoList", b =>

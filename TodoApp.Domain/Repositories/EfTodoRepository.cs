@@ -1,7 +1,6 @@
 ﻿using TodoApp.Domain.Entities;
-using TodoApp.Domain.Repositories;
 
-namespace TodoApp.Backend.Repositories
+namespace TodoApp.Domain.Repositories
 {
     public class EfTodoRepository : ITodoRepository
     {
