@@ -17,10 +17,10 @@ namespace TodoApp.Backend.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Todo> GetAll()
+        public ActionResult<User> GetAll()
         {
-            var todo = this.service.GetAll();
-            return Ok(todo);
+            var user = this.service.GetAll();
+            return Ok(user);
         }
     }
 }

@@ -15,6 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<ITodoRepository, EfTodoRepository>();
 builder.Services.AddScoped<TodoService>();
 
+builder.Services.AddScoped<IUserRepository, EfUserRepository>();
+builder.Services.AddScoped<UserService>();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

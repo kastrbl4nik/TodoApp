@@ -10,5 +10,6 @@ namespace TodoApp.Domain
 
         public DbSet<TodoList> TodoLists => Set<TodoList>();
         public DbSet<Todo> Todos => Set<Todo>();
+        public DbSet<User> Users => Set<User>();
     }
 }
