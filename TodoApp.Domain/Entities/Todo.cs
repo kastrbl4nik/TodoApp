@@ -19,5 +19,7 @@ namespace TodoApp.Domain.Entities
         public DateTime DueDate { get; set; }
 
         public bool Completed { get; set; }
+
+        public TodoList TodoList { get; set; }
     }
 }

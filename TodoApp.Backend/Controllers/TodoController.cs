@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoApp.Domain.Entities;
-using TodoApp.Domain.Services;
+using TodoApp.Domain.Repositories;
 
 namespace TodoApp.Backend.Controllers
 {
@@ -9,17 +9,17 @@ namespace TodoApp.Backend.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly TodoService todoService;
+        private readonly ITodoRepository repository;
 
-        public TodoController(TodoService todoService)
+        public TodoController(ITodoRepository repository)
         {
-            this.todoService = todoService;
+            this.repository = repository;
         }
 
         [HttpGet]
-        public ActionResult<Todo> GetAll()
+        public ActionResult<IEnumerable<Todo>> GetAll()
         {
-            var todo = todoService.GetAll();
+            var todo = repository.Todos;
             return Ok(todo);
         }
     }
