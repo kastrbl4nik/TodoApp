@@ -16,7 +16,7 @@ namespace TodoApp.Domain.Entities
 
         public string? Description { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
 
         public bool Completed { get; set; }
 

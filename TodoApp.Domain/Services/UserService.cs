@@ -25,12 +25,6 @@ namespace TodoApp.Domain.Services
         public User Save(User user) { 
             return this.repository.Add(user);
         }
-        
-        public User? GetByUsername(string username)
-        {
-            var user = this.repository.Users.Where(u => u.Username == username).FirstOrDefault();
-            return user;
-        }
         /*
         public void AddTodoList(User user, TodoList todoList)
         {
