@@ -23,6 +23,14 @@ namespace TodoApp.Domain
                 .HasMany(tl => tl.Todos)
                 .WithOne(t => t.TodoList)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<TodoList>()
+                .HasIndex(tl => tl.Title)
+                .IsUnique();
         }
     }
 }

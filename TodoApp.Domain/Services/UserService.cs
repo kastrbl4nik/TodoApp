@@ -23,13 +23,11 @@ namespace TodoApp.Domain.Services
         public IQueryable<User> Users => this.repository.Users;
 
         public User Save(User user) { 
+            if (this.repository.Users.Where(u => u.Username == user.Username).Any())
+            {
+                throw new InvalidOperationException("User with this username already exists");
+            }
             return this.repository.Add(user);
         }
-        /*
-        public void AddTodoList(User user, TodoList todoList)
-        {
-            _ = user.TodoLists.Append(todoList);
-            this.repository.Update(user);
-        }*/
     }
 }

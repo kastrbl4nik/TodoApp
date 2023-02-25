@@ -1,4 +1,5 @@
-﻿using TodoApp.Domain.Entities;
+﻿using System.Security.Cryptography;
+using TodoApp.Domain.Entities;
 using TodoApp.Domain.Models;
 
 namespace TodoApp.Domain.Extensions

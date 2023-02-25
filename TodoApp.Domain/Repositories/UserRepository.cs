@@ -19,19 +19,5 @@ namespace TodoApp.Domain.Repositories
             this.context.SaveChanges();
             return newUser.Entity;
         }
-
-        /*
-        public async Task<User> Add(User user)
-        {
-           var addedUser = this.context.AddAsync(user);
-           this.context.SaveChanges();
-           return await addedUser;
-        }
-
-        public void Update(User user)
-        {
-           this.context.Update(user);
-           this.context.SaveChanges();
-        }*/
     }
 }

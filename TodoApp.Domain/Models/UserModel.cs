@@ -9,7 +9,6 @@ namespace TodoApp.Domain.Models
             Username = username;
         }
 
-        [Required]
         public string Username { get; set; }
     }
 }
