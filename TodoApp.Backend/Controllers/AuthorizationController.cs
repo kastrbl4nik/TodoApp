@@ -15,16 +15,16 @@ namespace TodoApp.Backend.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly IConfiguration configuration;
-        private readonly UserService userService;
+        private readonly IUserService userService;
 
-        public AuthorizationController(IConfiguration configuration, UserService userService)
+        public AuthorizationController(IConfiguration configuration, IUserService userService)
         {
             this.configuration = configuration;
             this.userService = userService;
         }
 
         [HttpPost("register")]
-        public ActionResult<UserModel> Register(UserLoginModel input)
+        public ActionResult<UserModel> Register(AuthorizationModel input)
         {
             if(input.Password.IsNullOrEmpty())
             {
@@ -42,7 +42,7 @@ namespace TodoApp.Backend.Controllers
 
             try
             {
-                var savedUser = userService.Save(user);
+                var savedUser = userService.Add(user);
                 return Ok(savedUser.ToModel());
             }
             catch (Exception e)
@@ -52,7 +52,7 @@ namespace TodoApp.Backend.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<string> Login(UserLoginModel input)
+        public ActionResult<string> Login(AuthorizationModel input)
         {
             var user = userService.Users.Where(u => u.Username == input.Username).FirstOrDefault();
 
@@ -97,14 +97,14 @@ namespace TodoApp.Backend.Controllers
             return jwt;
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512();
             passwordSalt = hmac.Key;
             passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512(passwordSalt);
             var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));

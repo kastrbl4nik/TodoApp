@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using TodoApp.Domain.Entities;
 using TodoApp.Domain.Extensions;
 using TodoApp.Domain.Models;
-using TodoApp.Domain.Repositories;
 using TodoApp.Domain.Services;
 
 namespace TodoApp.Backend.Controllers
@@ -16,11 +11,11 @@ namespace TodoApp.Backend.Controllers
     [Authorize(Roles = "User")]
     public class UserController : ControllerBase
     {
-        private readonly UserService userService;
-        private readonly TodoListService todoListService;
-        private readonly TodoService todoService;
+        private readonly IUserService userService;
+        private readonly ITodoListService todoListService;
+        private readonly ITodoService todoService;
 
-        public UserController(UserService userService, TodoListService todoListService, TodoService todoService)
+        public UserController(IUserService userService, ITodoListService todoListService, ITodoService todoService)
         {
             this.userService = userService;
             this.todoListService = todoListService;
@@ -61,7 +56,7 @@ namespace TodoApp.Backend.Controllers
             }
 
             var query = this.todoListService.TodoLists
-                .Where(tl => tl.User.Username == username);
+                .Where(tl => tl.User != null && tl.User.Username == username);
 
             if (hidden != null)
             {
@@ -161,7 +156,8 @@ namespace TodoApp.Backend.Controllers
             }
 
             var todoList = this.todoListService.TodoLists
-                .Where(tl => tl.User.Username == username && tl.Id == listId).FirstOrDefault()?.ToModel();
+                .Where(tl => tl.User != null && tl.User.Username == username && tl.Id == listId)
+                .FirstOrDefault()?.ToModel();
 
             if (todoList is null)
             {
@@ -194,7 +190,11 @@ namespace TodoApp.Backend.Controllers
             }
 
             var todos = this.todoService.Todos
-                .Where(t => t.TodoList.User.Username == username && t.TodoList.Id == listId).Select(t => t.ToModel()).ToList();
+                .Where(t => 
+                    t.TodoList != null && t.TodoList.User != null &&
+                    t.TodoList.User.Username == username &&
+                    t.TodoList.Id == listId)
+                .Select(t => t.ToModel()).ToList();
 
             return Ok(todos);
         }

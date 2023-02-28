@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using TodoApp.Backend.Exceptions;
 using TodoApp.Domain;
 using TodoApp.Domain.Repositories;
 using TodoApp.Domain.Services;
@@ -35,9 +36,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<TodoListService>();
-builder.Services.AddScoped<TodoService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITodoListService, TodoListService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -52,14 +53,21 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+var authKey = builder.Configuration.GetSection("Authorization:Key").Value;
+if(authKey is null)
+{
+    throw new ConfigurationException("The authorization key not found");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                .GetBytes(builder.Configuration.GetSection("Authorization:Token").Value)),
+                .GetBytes(authKey)),
             ValidateIssuer = false,
             ValidateAudience = false,
         };

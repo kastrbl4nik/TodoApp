@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TodoApp.Domain.Models
+﻿namespace TodoApp.Domain.Models
 {
     public class UserModel
     {

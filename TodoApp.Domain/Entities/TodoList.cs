@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TodoApp.Domain.Entities
 {
@@ -14,17 +8,16 @@ namespace TodoApp.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
-        public bool Hidden { get; set; }
+        public bool? Hidden { get; set; }
 
         public List<Todo> Todos { get; set; } = new();
 
-        [Required]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

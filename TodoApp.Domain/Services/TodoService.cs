@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TodoApp.Domain.Entities;
+﻿using TodoApp.Domain.Entities;
 using TodoApp.Domain.Repositories;
 
 namespace TodoApp.Domain.Services
 {
-    public class TodoService
+    public class TodoService : ITodoService
     {
         private readonly ITodoRepository repository;
 
@@ -21,16 +16,28 @@ namespace TodoApp.Domain.Services
 
         public Todo Add(Todo todo)
         {
+            if (this.repository.Todos.Where(t => t.Id == todo.Id).Any())
+            {
+                throw new InvalidOperationException("Todo already exists");
+            }
             return this.repository.Add(todo);
         }
 
         public Todo Update(Todo todo)
         {
+            if (!this.repository.Todos.Where(t => t.Id == todo.Id).Any())
+            {
+                throw new InvalidOperationException("Todo does not exist");
+            }
             return this.repository.Update(todo);
         }
 
         public Todo Delete(Todo todo)
         {
+            if (!this.repository.Todos.Where(t => t.Id == todo.Id).Any())
+            {
+                throw new InvalidOperationException("Todo does not exist");
+            }
             return this.repository.Delete(todo);
         }
     }

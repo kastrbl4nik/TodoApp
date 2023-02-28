@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TodoApp.Domain.Entities;
+﻿using TodoApp.Domain.Entities;
 using TodoApp.Domain.Models;
 
 namespace TodoApp.Domain.Extensions
