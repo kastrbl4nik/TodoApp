@@ -78,8 +78,8 @@ namespace TodoApp.Backend.Controllers
                 new Claim(ClaimTypes.Role, "User"),
             };
 
-            if (this.configuration.GetSection("Authorization:Token").Value == null) {
-                throw new InvalidOperationException("Authorization token cannot be null");
+            if (this.configuration.GetSection("Authorization:Key").Value == null) {
+                throw new InvalidOperationException("Authorization key cannot be null");
             }
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
