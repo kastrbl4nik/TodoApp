@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using TodoApp.Backend.Exceptions;
 using TodoApp.Domain.Entities;
 using TodoApp.Domain.Extensions;
 using TodoApp.Domain.Models;
@@ -78,12 +79,13 @@ namespace TodoApp.Backend.Controllers
                 new Claim(ClaimTypes.Role, "User"),
             };
 
-            if (this.configuration.GetSection("Authorization:Key").Value == null) {
-                throw new InvalidOperationException("Authorization key cannot be null");
+            var authKey = this.configuration.GetSection("Authorization:Key").Value;
+            if(authKey is null)
+            {
+                throw new ConfigurationException("Authorization key cannot be null");
             }
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                this.configuration.GetSection("Authorization:Token").Value!));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(authKey));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
