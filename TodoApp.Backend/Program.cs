@@ -75,7 +75,6 @@ if (app.Environment.IsDevelopment())
         dbContext.Database.EnsureDeleted();
         dbContext.Database.EnsureCreated();
     }
-    //DebugData.EnsurePopulated(app);
     app.UseSwagger();
     app.UseSwaggerUI();
 }

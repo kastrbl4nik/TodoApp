@@ -1,0 +1,52 @@
+.container {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px!important;
+
+    font-family: 'Gudea';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 30px;
+    text-transform: capitalize;
+}
+
+.container small {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #5C5C5C;
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-transform: capitalize;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 18px;
+    font-weight: 700;
+
+    background: rgba(93, 41, 106, 0.7);
+    border-radius: 10px;
+}

@@ -1,0 +1,354 @@
+/*@import url('./fonts/fonts.css');
+
+::selection {
+    color: #fff;
+    background-color: rgba(93, 41, 106, 0.7);
+}
+
+body {
+    font-family: 'Gudea';
+    color: #373737;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('./images/VioletBlue.png');
+    background-size: cover;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    max-width: 500px;
+    width: 100%;
+    height: 45px;
+}
+
+header > input[type="search"] {
+    width: 200px;
+    height: 30px;
+    border-radius: 20px;
+    background: #fff;
+    padding: 10px 20px;
+}
+
+.burger {
+    height: 18px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.burger div {
+    width: 18px;
+    height: 4px;
+
+    background: #fff;
+    border-radius: 4px;
+}
+
+.avatar {
+    width: 30px;
+    height: 30px;
+
+    background: #FFFFFF;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.tagContainer {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+}
+
+.tag {
+    cursor: pointer;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.tagActive {
+    position: relative;
+    background: rgba(93, 41, 106, 0.7);
+    color: #fff;
+    padding-left: 32px;
+}
+
+.tagActive::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 18px;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+
+.todoListsContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 768px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 5px;
+}
+
+.todoListsContainer .todoListTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-transform: capitalize;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.todoListTitle .leftSide {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.todoListTitle .leftSide button {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.todoListTitle .leftSide svg {
+    fill: #373737;
+    height: 40px;
+    width: 40px;
+}
+
+.todoListsContainer .todoListSelected {
+    display: flex;
+    max-height: 60vh;
+    aspect-ratio: 1 / 1;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 10px 20px 20px 10px;
+    flex-grow: 1;
+    padding: 20px;
+    gap: 20px;
+}
+
+.todoListsContainer aside {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 40%;
+    font-family: 'Gudea';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 30px;
+    text-transform: capitalize;
+}
+
+.todoListSmall {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.todoListSmall small {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #5C5C5C;
+}
+
+.todoListSmall .leftSide {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.todoListSmall .todoListIcon {
+    min-width: 30px;
+    height: 30px;
+    font-size: 18px;
+}
+
+.todoListsContainer aside :nth-child(n) {
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.todoListIcon {
+    min-width: 59px;
+    height: 59px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-transform: capitalize;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    background: rgba(93, 41, 106, 0.7);
+    border-radius: 10px;
+}
+
+.todoListContent {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.todoListContent .description {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    
+    color: #5C5C5C;
+    text-transform: capitalize;
+}
+
+.todoListBottom {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.todoListContent input[type="text"],
+.todoListContent input[type="textarea"] {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.todo {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 23px;
+    color: #5C5C5C;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.todo input[type="date"],
+.todoListContent small {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #5C5C5C;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    height: 16px;
+    width: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg stroke='currentColor' fill='%235C5C5C' stroke-width='0' viewBox='0 0 16 16' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+input[type="date"] {
+    display: block;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.custom-checkbox {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.custom-checkbox+label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+}
+
+.custom-checkbox+label::before {
+    content: '';
+    display: inline-block;
+    width: calc(1em - 2px);
+    height: calc(1em - 2px);
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 2px solid #6B6B6B;
+    border-radius: 0.25em;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+}
+
+.custom-checkbox:checked+label::before {
+    border-color: rgba(93, 41, 106, 0.0);
+    background-color: rgba(93, 41, 106, 0.7);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+}
+
+.custom-checkbox:not(:disabled):not(:checked)+label:hover::before {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%236B6B6B' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+    border-color: #6B6B6B;
+}
+
+
+.todoDelete,
+.newTodo {
+    cursor: pointer;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.todoDelete {
+    margin-left: 5px;
+}*/

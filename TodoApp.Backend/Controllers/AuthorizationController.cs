@@ -10,6 +10,8 @@ using TodoApp.Domain.Services;
 
 namespace TodoApp.Backend.Controllers
 {
+    [Route("api/")]
+    [ApiController]
     public class AuthorizationController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -24,6 +26,11 @@ namespace TodoApp.Backend.Controllers
         [HttpPost("register")]
         public ActionResult<UserModel> Register(UserLoginModel input)
         {
+            if(input.Password.IsNullOrEmpty())
+            {
+                return BadRequest("Password cannot be empty");
+            }
+
             CreatePasswordHash(input.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             var user = new User
@@ -33,9 +40,15 @@ namespace TodoApp.Backend.Controllers
                 PasswordSalt = passwordSalt,
             };
 
-            var savedUser = userService.Save(user);
-
-            return Ok(savedUser.ToModel());
+            try
+            {
+                var savedUser = userService.Save(user);
+                return Ok(savedUser.ToModel());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost("login")]

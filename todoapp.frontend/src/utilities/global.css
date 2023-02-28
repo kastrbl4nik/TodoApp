@@ -1,0 +1,41 @@
+@import url('./reset.css');
+@import url('../fonts/fonts.css');
+
+::selection {
+    color: #fff;
+    background-color: rgba(93, 41, 106, 0.7);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+body {
+    font-family: 'Gudea';
+    color: #373737;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('../images/VioletBlue.png');
+    background-size: cover;
+}
+
+.box {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.04);
+}

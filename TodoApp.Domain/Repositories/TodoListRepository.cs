@@ -19,5 +19,19 @@ namespace TodoApp.Domain.Repositories
             this.context.SaveChanges();
             return savedTodoList.Entity;
         }
+
+        public TodoList Update(TodoList todoList)
+        {
+            var updatedTodoList = this.context.TodoLists.Update(todoList);
+            this.context.SaveChanges();
+            return updatedTodoList.Entity;
+        }
+
+        public TodoList Delete(TodoList todoList)
+        {
+            var deletedTodoList = this.context.TodoLists.Remove(todoList);
+            this.context.SaveChanges();
+            return deletedTodoList.Entity;
+        }
     }
 }

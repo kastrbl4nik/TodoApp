@@ -14,10 +14,11 @@ namespace TodoApp.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
         public string Title { get; set; }
 
         public string? Description { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
 
         public bool Hidden { get; set; }
 

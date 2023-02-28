@@ -12,7 +12,7 @@ namespace TodoApp.Domain.Extensions
     {
         public static TodoModel ToModel(this Todo todo)
         {
-            return new TodoModel(todo.Title, todo.Description, todo.DueDate, todo.Completed);
+            return new TodoModel(todo.Id, todo.Title, todo.DueDate, todo.Completed);
         }
 
         public static Todo ToEntity(this TodoModel todoModel, TodoList todoList)
@@ -20,7 +20,6 @@ namespace TodoApp.Domain.Extensions
             return new Todo
             {
                 Title = todoModel.Title,
-                Description = todoModel.Description,
                 DueDate = todoModel.DueDate,
                 Completed = todoModel.Completed,
                 TodoList = todoList,

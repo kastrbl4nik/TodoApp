@@ -1,0 +1,104 @@
+.todo {
+    padding-right: 10px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 23px;
+    color: #5C5C5C;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.todo input[type="date"] {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #5C5C5C;
+}
+
+.todo input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg stroke='currentColor' fill='%235C5C5C' stroke-width='0' viewBox='0 0 16 16' height='1em' width='1em' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.todo input[type="date"] {
+    display: block;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.checkbox {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.checkbox+label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+}
+
+.checkbox+label::before {
+    content: '';
+    display: inline-block;
+    width: calc(1em - 2px);
+    height: calc(1em - 2px);
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 2px solid #6B6B6B;
+    border-radius: 0.25em;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+}
+
+.checkbox:checked+label::before {
+    border-color: rgba(93, 41, 106, 0.0);
+    background-color: rgba(93, 41, 106, 0.7);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+}
+
+.checkbox:not(:disabled):not(:checked)+label:hover::before {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%236B6B6B' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3e%3c/svg%3e");
+    border-color: #6B6B6B;
+}
+
+.deleteTodo,
+.createTodo {
+    cursor: pointer;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.deleteTodo {
+    margin-left: 5px;
+}
+
+.createTodo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 5px;   
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.createTodo span {
+    font-style: italic;
+    font-size: 16px;
+    line-height: 18px;
+}

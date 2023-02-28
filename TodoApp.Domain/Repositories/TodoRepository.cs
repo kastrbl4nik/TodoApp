@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,20 @@ namespace TodoApp.Domain.Repositories
             var savedTodo = this.context.Todos.Add(todo);
             this.context.SaveChanges();
             return savedTodo.Entity;
+        }
+
+        public Todo Update(Todo todo)
+        {
+            var updatedTodo = this.context.Todos.Update(todo);
+            this.context.SaveChanges();
+            return updatedTodo.Entity;
+        }
+
+        public Todo Delete(Todo todo)
+        {
+            var deletedTodo = this.context.Todos.Remove(todo);
+            this.context.SaveChanges();
+            return deletedTodo.Entity;
         }
     }
 }

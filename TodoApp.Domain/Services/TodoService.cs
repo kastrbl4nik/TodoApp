@@ -19,9 +19,19 @@ namespace TodoApp.Domain.Services
 
         public IQueryable<Todo> Todos => this.repository.Todos;
 
-        public Todo Save(Todo todo)
+        public Todo Add(Todo todo)
         {
             return this.repository.Add(todo);
+        }
+
+        public Todo Update(Todo todo)
+        {
+            return this.repository.Update(todo);
+        }
+
+        public Todo Delete(Todo todo)
+        {
+            return this.repository.Delete(todo);
         }
     }
 }

@@ -29,8 +29,8 @@ namespace TodoApp.Domain
                 .IsUnique();
 
             modelBuilder.Entity<TodoList>()
-                .HasIndex(tl => tl.Title)
-                .IsUnique();
+                .Property(tl => tl.CreatedDate)
+                .HasDefaultValueSql("getdate()");
         }
     }
 }

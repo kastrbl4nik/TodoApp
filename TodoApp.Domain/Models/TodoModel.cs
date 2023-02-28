@@ -9,21 +9,20 @@ namespace TodoApp.Domain.Models
 {
     public class TodoModel
     {
-        public TodoModel(string title, string? description, DateTime? dueDate, bool completed)
+        public TodoModel(int? id, string title, DateTime? dueDate, bool completed)
         {
+            Id = id;
             Title = title;
-            Description = description;
             DueDate = dueDate;
             Completed = completed;
         }
 
-        public string Title { get; set; }
+        public int? Id { get; set; }
 
-        public string? Description { get; set; }
+        public string Title { get; set; }
 
         public DateTime? DueDate { get; set; }
 
         public bool Completed { get; set; }
-
     }
 }

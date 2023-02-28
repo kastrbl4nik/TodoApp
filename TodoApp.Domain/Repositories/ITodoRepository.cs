@@ -12,5 +12,9 @@ namespace TodoApp.Domain.Repositories
         IQueryable<Todo> Todos { get; }
 
         Todo Add(Todo todo);
+
+        Todo Update(Todo todo);
+
+        Todo Delete(Todo todo);
     }
 }

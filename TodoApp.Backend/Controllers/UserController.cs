@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using TodoApp.Domain.Entities;
 using TodoApp.Domain.Extensions;
 using TodoApp.Domain.Models;
@@ -12,6 +13,7 @@ namespace TodoApp.Backend.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [Authorize(Roles = "User")]
     public class UserController : ControllerBase
     {
         private readonly UserService userService;
@@ -25,50 +27,26 @@ namespace TodoApp.Backend.Controllers
             this.todoService = todoService;
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public ActionResult<IEnumerable<UserModel>> GetUsers()
-        {
-            var users = this.userService.Users
-                .Select(u => u.ToModel())
-                .ToList();
-            return Ok(users);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public ActionResult<UserModel> CreateUser(UserModel input)
-        {
-            var user = new User
-            {
-                Username = input.Username
-            };
-
-            var savedUser = this.userService.Save(user).ToModel();
-            return Ok(savedUser);
-        }
-
         [HttpGet("{username}")]
-        [Authorize(Roles = "User")]
         public ActionResult<UserModel> GetUser(string username)
         {
-            if(User.Identity?.Name != username)
+            if (User.Identity?.Name != username)
             {
                 return Forbid();
             }
+
             var user = this.userService.Users.Where(u => u.Username == username).FirstOrDefault()?.ToModel();
 
-            if(user is null)
+            if (user is null)
             {
                 return NotFound();
             }
 
             return Ok(user);
         }
-        
+
         [HttpGet("{username}/todoLists")]
-        [Authorize(Roles = "User")]
-        public ActionResult<TodoListModel> GetTodoLists(string username, bool? hidden)
+        public ActionResult<TodoListModel> GetTodoLists(string username, bool? hidden, string? nameLike)
         {
             if (User.Identity?.Name != username)
             {
@@ -77,7 +55,7 @@ namespace TodoApp.Backend.Controllers
 
             var user = this.userService.Users.Where(u => u.Username == username).FirstOrDefault();
 
-            if(user is null)
+            if (user is null)
             {
                 return NotFound();
             }
@@ -85,19 +63,23 @@ namespace TodoApp.Backend.Controllers
             var query = this.todoListService.TodoLists
                 .Where(tl => tl.User.Username == username);
 
-            if(hidden != null) 
+            if (hidden != null)
             {
                 query = query.Where(tl => tl.Hidden == hidden);
+            }
+
+            if (nameLike != null)
+            {
+                query = query.Where(tl => tl.Title.Contains(nameLike));
             }
 
             var lists = query.Select(tl => tl.ToModel());
 
             return Ok(lists);
         }
-        
+
         [HttpPost("{username}/todoLists")]
-        [Authorize(Roles = "User")]
-        public ActionResult<IEnumerable<TodoListModel>> CreateTodoList(string username, TodoListModel input)
+        public ActionResult<TodoListModel> CreateTodoList(string username, TodoListModel input)
         {
             if (User.Identity?.Name != username)
             {
@@ -111,21 +93,67 @@ namespace TodoApp.Backend.Controllers
                 return NotFound();
             }
 
-            var todoList = new TodoList
-            {
-                Title = input.Title,
-                Hidden = input.Hidden,
-                User = user,
-            };
+            var todoList = input.ToEntity(user);
 
-            var savedTodoList = this.todoListService.Save(todoList).ToModel();
-
-            return Ok(savedTodoList);
+            return CreateActionResult(() => this.todoListService.Add(todoList).ToModel());
         }
 
-        [HttpGet("{username}/todoLists/{title}")]
-        [Authorize(Roles = "User")]
-        public ActionResult<TodoListModel> GetTodoList(string username, string title) 
+        [HttpPut("{username}/todoLists/{id}")]
+        public ActionResult<TodoListModel> UpdateTodoList(string username, int id, TodoListModel input)
+        {
+            if (User.Identity?.Name != username)
+            {
+                return Forbid();
+            }
+
+            var user = this.userService.Users.Where(u => u.Username == username).FirstOrDefault();
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var todoList = this.todoListService.TodoLists.FirstOrDefault(tl => tl.Id == id);
+
+            if (todoList is null)
+            {
+                return NotFound();
+            }
+
+            todoList.Title = input.Title;
+            todoList.Description = input.Description;
+            todoList.Hidden = input.Hidden;
+
+            return CreateActionResult(() => this.todoListService.Update(todoList).ToModel());
+        }
+
+        [HttpDelete("{username}/todoLists/{id}")]
+        public ActionResult<TodoListModel> DeleteTodoList(string username, int id)
+        {
+            if (User.Identity?.Name != username)
+            {
+                return Forbid();
+            }
+
+            var user = this.userService.Users.Where(u => u.Username == username).FirstOrDefault();
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var todoList = this.todoListService.TodoLists.FirstOrDefault(tl => tl.Id == id);
+
+            if (todoList is null)
+            {
+                return NotFound();
+            }
+
+            return CreateActionResult(() => this.todoListService.Delete(todoList).ToModel());
+        }
+
+        [HttpGet("{username}/todoLists/{listId}")]
+        public ActionResult<TodoListModel> GetTodoList(string username, int listId)
         {
             if (User.Identity?.Name != username)
             {
@@ -133,9 +161,9 @@ namespace TodoApp.Backend.Controllers
             }
 
             var todoList = this.todoListService.TodoLists
-                .Where(tl => tl.User.Username == username && tl.Title == title).FirstOrDefault()?.ToModel();
+                .Where(tl => tl.User.Username == username && tl.Id == listId).FirstOrDefault()?.ToModel();
 
-            if(todoList is null)
+            if (todoList is null)
             {
                 return NotFound();
             }
@@ -143,9 +171,8 @@ namespace TodoApp.Backend.Controllers
             return Ok(todoList);
         }
 
-        [HttpGet("{username}/todoLists/{title}/todos")]
-        [Authorize(Roles = "User")]
-        public ActionResult<IEnumerable<TodoModel>> GetTodos(string username, string title)
+        [HttpGet("{username}/todoLists/{listId}/todos")]
+        public ActionResult<IEnumerable<TodoModel>> GetTodos(string username, int listId)
         {
             if (User.Identity?.Name != username)
             {
@@ -159,7 +186,7 @@ namespace TodoApp.Backend.Controllers
                 return NotFound();
             }
 
-            var todoList = this.todoListService.TodoLists.Where(tl => tl.Title == title).FirstOrDefault();
+            var todoList = this.todoListService.TodoLists.Where(tl => tl.Id == listId).FirstOrDefault();
 
             if (todoList is null)
             {
@@ -167,14 +194,13 @@ namespace TodoApp.Backend.Controllers
             }
 
             var todos = this.todoService.Todos
-                .Where(t => t.TodoList.User.Username == username && t.TodoList.Title == title).Select(t => t.ToModel()).ToList();
+                .Where(t => t.TodoList.User.Username == username && t.TodoList.Id == listId).Select(t => t.ToModel()).ToList();
 
             return Ok(todos);
         }
-        
-        [HttpPost("{username}/todoLists/{title}/todos")]
-        [Authorize(Roles = "User")]
-        public ActionResult<TodoModel> CreateTodo(string username, string title, TodoModel input)
+
+        [HttpPost("{username}/todoLists/{listId}/todos")]
+        public ActionResult<TodoModel> CreateTodo(string username, int listId, TodoModel input)
         {
             if (User.Identity?.Name != username)
             {
@@ -188,7 +214,7 @@ namespace TodoApp.Backend.Controllers
                 return NotFound();
             }
 
-            var todoList = this.todoListService.TodoLists.Where(tl => tl.Title == title).FirstOrDefault();
+            var todoList = this.todoListService.TodoLists.Where(tl => tl.Id == listId).FirstOrDefault();
 
             if (todoList is null)
             {
@@ -197,9 +223,88 @@ namespace TodoApp.Backend.Controllers
 
             var todo = input.ToEntity(todoList);
 
-            var savedTodo = this.todoService.Save(todo).ToModel();
+            return CreateActionResult(() => this.todoService.Add(todo).ToModel());
+        }
 
-            return Ok(savedTodo);
+        [HttpPut("{username}/todoLists/{listId}/todos/{id}")]
+        public ActionResult<TodoModel> UpdateTodo(string username, int listId, int id, TodoModel input)
+        {
+            if (User.Identity?.Name != username)
+            {
+                return Forbid();
+            }
+
+            var user = this.userService.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var todoList = this.todoListService.TodoLists.FirstOrDefault(tl => tl.Id == listId);
+
+            if (todoList is null)
+            {
+                return NotFound();
+            }
+
+            var todo = this.todoService.Todos.FirstOrDefault(t => t.Id == id);
+
+            if (todo is null)
+            {
+                return NotFound();
+            }
+
+            todo.DueDate = input.DueDate;
+            todo.Title = input.Title;
+            todo.Completed = input.Completed;
+
+            return CreateActionResult(() => this.todoService.Update(todo).ToModel());
+        }
+
+        [HttpDelete("{username}/todoLists/{listId}/todos/{id}")]
+        public ActionResult<TodoModel> DeleteTodo(string username, int listId, int id)
+        {
+            if (User.Identity?.Name != username)
+            {
+                return Forbid();
+            }
+
+            var user = this.userService.Users.FirstOrDefault(u => u.Username == username);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var todoList = this.todoListService.TodoLists.FirstOrDefault(tl => tl.Id == listId);
+
+            if (todoList is null)
+            {
+                return NotFound();
+            }
+
+            var todo = this.todoService.Todos.FirstOrDefault(t => t.Id == id);
+
+            if (todo is null)
+            {
+                return NotFound();
+            }
+
+            return CreateActionResult(() => this.todoService.Delete(todo).ToModel());
+        }
+
+        private ActionResult<T> CreateActionResult<T>(Func<T> action)
+        {
+            try
+            {
+                var result = action();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
